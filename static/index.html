@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="International epidemiology priorities survey for the WCE 2027 EpiLovers Datathon.">
+  <title>EpiLovers Datathon · WCE 2027</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css?v=2">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+  <header class="topbar">
+    <a class="wordmark" href="#survey" aria-label="EpiLovers Datathon">
+      <span class="wordmark-mark" aria-hidden="true">e</span>
+      <span><strong>EpiLovers</strong><small>WCE 2027 · DATATHON</small></span>
+    </a>
+    <div class="top-actions">
+      <nav class="nav-pills" aria-label="Primary">
+        <button class="nav-pill active" type="button" data-view="survey" data-i18n="navSurvey">Encuesta</button>
+        <button class="nav-pill" type="button" data-view="dashboard" data-i18n="navDashboard">Tablero</button>
+      </nav>
+      <label class="language-control">
+        <span class="sr-only" data-i18n="language">Idioma</span>
+        <select id="language" aria-label="Idioma">
+          <option value="es">ES · Español</option>
+          <option value="en">EN · English</option>
+          <option value="pt">PT · Português</option>
+          <option value="fr">FR · Français</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="survey-view" class="view active">
+      <div class="brand-hero">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="heroEyebrow">DATATÓN INTERNACIONAL · WCE 2027</p>
+          <h1 data-i18n="heroTitle">¿Qué reto de epidemiología debemos resolver juntos?</h1>
+          <p data-i18n="heroBody">Ayúdanos a construir una agenda internacional de epidemiología basada en las prioridades de quienes trabajan en los territorios.</p>
+          <span class="time-chip"><span aria-hidden="true">◷</span> <span data-i18n="time">4 minutos</span></span>
+        </div>
+      </div>
+
+      <div class="survey-shell">
+        <aside class="survey-intro">
+          <p class="kicker" data-i18n="whyKicker">TU VOZ CUENTA</p>
+          <h2 data-i18n="whyTitle">De un reto local a una colaboración global</h2>
+          <p data-i18n="whyBody">Las respuestas orientarán el datatón del XXIV Congreso Mundial de Epidemiología. Buscamos problemas concretos, comparables y con potencial de colaboración.</p>
+          <div class="privacy-note">
+            <span class="privacy-icon" aria-hidden="true">◎</span>
+            <div><strong data-i18n="privacyTitle">Uso responsable de datos</strong><p data-i18n="privacyBody">Tu correo funciona como identificador y solo estará disponible para el comité. El tablero muestra resultados agregados.</p></div>
+          </div>
+          <div class="congress-note">
+            <strong>WCE 2027</strong>
+            <span data-i18n="congressDate">Medellín, Colombia · 31 ago — 3 sep</span>
+          </div>
+        </aside>
+
+        <section class="form-card" aria-labelledby="form-title">
+          <div class="progress-head">
+            <div><p class="step-label" id="step-label">PASO 1 DE 3</p><h2 id="form-title" data-i18n="step1Title">Sobre ti y tu territorio</h2></div>
+            <span id="progress-percent">33%</span>
+          </div>
+          <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+
+          <form id="survey-form" novalidate>
+            <section class="form-step active" data-step="1">
+              <p class="section-lead" data-i18n="step1Lead">Empecemos con la información mínima para ubicar el reto.</p>
+              <div class="field full">
+                <label for="email"><span data-i18n="email">Correo electrónico</span><b aria-hidden="true">*</b></label>
+                <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required data-i18n-placeholder="emailPlaceholder" placeholder="nombre@organizacion.org">
+                <small data-i18n="emailHelp">No solicitamos tu nombre. Usaremos el correo para evitar respuestas duplicadas.</small>
+              </div>
+              <div class="field-grid three">
+                <div class="field"><label for="country"><span data-i18n="country">País</span><b>*</b></label><select id="country" name="country" required><option value="" data-i18n="select">Selecciona…</option></select></div>
+                <div class="field"><label for="admin1"><span data-i18n="admin1">Departamento / estado / región</span><b>*</b></label><input id="admin1" name="admin1" maxlength="100" required data-i18n-placeholder="admin1Placeholder" placeholder="Primer nivel administrativo"></div>
+                <div class="field"><label for="city"><span data-i18n="city">Ciudad o municipio</span><b>*</b></label><input id="city" name="city" maxlength="100" required data-i18n-placeholder="cityPlaceholder" placeholder="Ciudad principal"></div>
+              </div>
+              <div class="field-grid three">
+                <div class="field"><label for="role"><span data-i18n="role">Tu rol principal</span><b>*</b></label><select id="role" name="role" required></select></div>
+                <div class="field"><label for="organization"><span data-i18n="organization">Organización</span> <em data-i18n="optional">opcional</em></label><input id="organization" name="organization" maxlength="150" data-i18n-placeholder="organizationPlaceholder" placeholder="Institución o colectivo"></div>
+                <div class="field"><label for="work_scope"><span data-i18n="scope">Alcance de tu trabajo</span><b>*</b></label><select id="work_scope" name="work_scope" required></select></div>
+              </div>
+            </section>
+
+            <section class="form-step" data-step="2">
+              <p class="section-lead" data-i18n="step2Lead">Elige hasta tres áreas y describe el reto más urgente en tus propias palabras.</p>
+              <fieldset class="field full category-field">
+                <legend><span data-i18n="categories">Áreas prioritarias de epidemiología</span><b>*</b></legend>
+                <small data-i18n="categoriesHelp">Selecciona entre 1 y 3 áreas.</small>
+                <div id="category-grid" class="category-grid"></div>
+                <p id="category-count" class="selection-count" aria-live="polite"></p>
+              </fieldset>
+              <div class="field full">
+                <label for="priority_topic"><span data-i18n="priorityTopic">¿Cuál es el reto o problema prioritario?</span><b>*</b></label>
+                <textarea id="priority_topic" name="priority_topic" maxlength="500" rows="4" required data-i18n-placeholder="topicPlaceholder" placeholder="Descríbelo de forma concreta: población, lugar y por qué urge actuar…"></textarea>
+                <small><span data-i18n="topicHelp">Evita incluir nombres o datos personales.</span> <span class="char-count"><span id="topic-count">0</span>/500</span></small>
+              </div>
+              <div class="field full">
+                <label for="affected_population"><span data-i18n="population">Población especialmente afectada</span> <em data-i18n="optional">opcional</em></label>
+                <input id="affected_population" name="affected_population" maxlength="250" data-i18n-placeholder="populationPlaceholder" placeholder="Ej.: comunidades rurales, niñez, trabajadores informales">
+              </div>
+            </section>
+
+            <section class="form-step" data-step="3">
+              <p class="section-lead" data-i18n="step3Lead">Para cerrar, cuéntanos dónde está el principal cuello de botella y cómo podríamos sumar esfuerzos.</p>
+              <div class="field full">
+                <label for="challenge_stage"><span data-i18n="stage">¿En qué etapa está la mayor dificultad?</span><b>*</b></label>
+                <select id="challenge_stage" name="challenge_stage" required></select>
+              </div>
+              <div class="field full">
+                <label for="collaboration"><span data-i18n="collaboration">¿Qué datos, capacidades o alianzas ayudarían?</span> <em data-i18n="optional">opcional</em></label>
+                <textarea id="collaboration" name="collaboration" maxlength="500" rows="3" data-i18n-placeholder="collaborationPlaceholder" placeholder="Ej.: datos comparables, métodos, socios comunitarios, tecnología…"></textarea>
+              </div>
+              <label class="consent-card">
+                <input id="consent" name="consent" type="checkbox" required>
+                <span><strong data-i18n="consentTitle">Autorizo el uso de mi respuesta para el datatón</strong><small data-i18n="consentBody">Acepto que el comité analice estos datos y publique resultados agregados. Mi correo no aparecerá en el tablero.</small></span>
+              </label>
+            </section>
+
+            <div id="form-alert" class="form-alert" role="alert" hidden></div>
+            <div class="form-actions">
+              <button id="back-btn" class="button ghost" type="button" hidden><span aria-hidden="true">←</span> <span data-i18n="back">Atrás</span></button>
+              <button id="next-btn" class="button primary" type="button"><span data-i18n="next">Continuar</span> <span aria-hidden="true">→</span></button>
+              <button id="submit-btn" class="button primary" type="submit" hidden><span data-i18n="submit">Enviar respuesta</span> <span aria-hidden="true">↗</span></button>
+            </div>
+          </form>
+
+          <section id="success-panel" class="success-panel" hidden>
+            <div class="success-mark" aria-hidden="true">✓</div>
+            <p class="kicker" data-i18n="successKicker">RESPUESTA RECIBIDA</p>
+            <h2 data-i18n="successTitle">Gracias por poner tu territorio en el mapa</h2>
+            <p data-i18n="successBody">Tu aporte ya forma parte de la agenda de retos para el datatón.</p>
+            <div class="response-id"><span data-i18n="responseId">Identificador</span><strong id="response-id"></strong></div>
+            <button id="new-response" class="button ghost" type="button" data-i18n="newResponse">Registrar otra respuesta</button>
+          </section>
+        </section>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="view dashboard-view">
+      <div class="dashboard-head">
+        <div><p class="eyebrow" data-i18n="dashboardEyebrow">OBSERVATORIO DE PRIORIDADES</p><h1 data-i18n="dashboardTitle">Pulso epidemiológico internacional</h1><p data-i18n="dashboardBody">Una lectura agregada de los retos propuestos para orientar equipos, datos y colaboraciones.</p></div>
+        <div id="dashboard-actions" class="dashboard-actions" hidden>
+          <button id="demo-toggle" class="button ghost small" type="button" data-i18n="showDemo">Ver datos demo</button>
+          <a id="export-link" class="button primary small" href="/api/export.csv" data-i18n="downloadCsv">Descargar CSV</a>
+          <button id="logout-btn" class="icon-button" type="button" aria-label="Cerrar sesión" title="Cerrar sesión">↪</button>
+        </div>
+      </div>
+
+      <section id="login-panel" class="login-card">
+        <div class="login-art" aria-hidden="true"><span>WCE</span><strong>2027</strong></div>
+        <form id="login-form">
+          <p class="kicker" data-i18n="committeeAccess">ACCESO DEL COMITÉ</p>
+          <h2 data-i18n="loginTitle">Tablero protegido</h2>
+          <p data-i18n="loginBody">Ingresa la clave de administración para consultar agregados y descargar la base de datos.</p>
+          <div class="field"><label for="admin-pin" data-i18n="pin">Clave de acceso</label><input id="admin-pin" type="password" required autocomplete="current-password" data-i18n-placeholder="pinPlaceholder" placeholder="••••••••"></div>
+          <p id="login-error" class="form-alert" role="alert" hidden></p>
+          <button class="button primary wide" type="submit" data-i18n="enter">Entrar al tablero</button>
+          <small class="local-hint" data-i18n="localHint">La clave temporal aparece en la ventana donde iniciaste la aplicación.</small>
+        </form>
+      </section>
+
+      <div id="dashboard-content" hidden>
+        <div id="demo-banner" class="demo-banner" hidden><span>DEMO</span><p data-i18n="demoBanner">Estás viendo datos ficticios para explorar el tablero. No se mezclan con respuestas reales.</p></div>
+        <div class="metric-grid">
+          <article class="metric-card"><span data-i18n="responses">Respuestas</span><strong id="metric-total">0</strong><small data-i18n="responsesNote">aportes recibidos</small></article>
+          <article class="metric-card teal"><span data-i18n="countryCoverage">Cobertura</span><strong id="metric-countries">0</strong><small data-i18n="countriesNote">países representados</small></article>
+          <article class="metric-card coral"><span data-i18n="topPriority">Prioridad principal</span><strong id="metric-top">—</strong><small data-i18n="mentionsNote">por número de menciones</small></article>
+        </div>
+
+        <div id="empty-dashboard" class="empty-state" hidden>
+          <span aria-hidden="true">◎</span><h2 data-i18n="emptyTitle">Aún no hay respuestas reales</h2><p data-i18n="emptyBody">Prueba el tablero con datos demostrativos o vuelve a la encuesta para registrar la primera respuesta.</p>
+          <button id="empty-demo" class="button primary" type="button" data-i18n="exploreDemo">Explorar datos demo</button>
+        </div>
+
+        <div id="charts-area">
+          <div class="dashboard-grid main-grid">
+            <article class="chart-card span-2"><div class="card-head"><div><p class="kicker" data-i18n="priorityAreas">ÁREAS PRIORITARIAS</p><h2 data-i18n="whatMobilizes">¿Qué temas movilizan a la comunidad?</h2></div></div><div id="category-bars" class="bar-chart"></div></article>
+            <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="reach">ALCANCE</p><h2 data-i18n="workScale">Escala de trabajo</h2></div></div><div id="scope-donut" class="donut-wrap"></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="geography">GEOGRAFÍA</p><h2 data-i18n="participatingCountries">Países participantes</h2></div></div><div id="country-list" class="country-list"></div></article>
+            <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="bottlenecks">CUELLOS DE BOTELLA</p><h2 data-i18n="whereHelp">¿Dónde se necesita más apoyo?</h2></div></div><div id="stage-bars" class="bar-chart compact"></div></article>
+          </div>
+          <article class="chart-card topics-card"><div class="card-head"><div><p class="kicker" data-i18n="voices">VOCES DEL TERRITORIO</p><h2 data-i18n="recentChallenges">Retos priorizados recientemente</h2></div></div><div id="topics-table" class="topics-table"></div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>WCE 2027 · XXIV World Congress of Epidemiology</span><span data-i18n="footer">Prototipo del Comité del Datatón · Medellín, Colombia</span></footer>
+  <script src="/static/app.js?v=2" defer></script>
+</body>
+</html>
