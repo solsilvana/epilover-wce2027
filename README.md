@@ -22,12 +22,13 @@ No hay que instalar paquetes: la aplicación usa únicamente herramientas inclui
 
 ## Acceso al tablero
 
-- Al iniciar la aplicación, la ventana negra muestra una **clave temporal del tablero**.
-- Entra en la pestaña **Tablero** e introduce esa clave.
+- La aplicación usa la clave privada configurada en el perfil local de Windows.
+- Si el equipo no tiene una clave configurada, la ventana negra genera y muestra una clave temporal.
+- Entra en la pestaña **Tablero** e introduce la clave local.
 - Cuando no existan respuestas reales, usa **Ver datos demo** para recorrer el prototipo.
 - **Descargar CSV** exporta únicamente respuestas reales e incluye el correo para uso autorizado del comité.
 
-Para definir una clave propia durante una sesión local, abre PowerShell desde esta carpeta:
+Para definir una clave propia durante una sesión local, abre PowerShell desde esta carpeta. No escribas la clave dentro del código ni la publiques en GitHub:
 
 ```powershell
 $env:EPILOVER_ADMIN_PIN="una-clave-segura-y-larga"

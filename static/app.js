@@ -15,10 +15,10 @@ const COPY = {
   }
 };
 
-COPY.es.localHint = "La clave temporal aparece en la ventana donde iniciaste la aplicación.";
-COPY.en.localHint = "The temporary key appears in the window where you started the application.";
-COPY.pt.localHint = "A chave temporária aparece na janela onde você iniciou o aplicativo.";
-COPY.fr.localHint = "La clé temporaire apparaît dans la fenêtre où vous avez démarré l’application.";
+COPY.es.localHint = "Usa la clave local configurada por el comité.";
+COPY.en.localHint = "Use the local key configured by the committee.";
+COPY.pt.localHint = "Use a chave local configurada pelo comitê.";
+COPY.fr.localHint = "Utilisez la clé locale configurée par le comité.";
 
 const LABELS = {
   categories: {
