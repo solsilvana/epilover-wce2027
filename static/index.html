@@ -6,7 +6,7 @@
   <meta name="description" content="International epidemiology priorities survey for the WCE 2027 EpiLovers Datathon.">
   <title>EpiLovers Datathon · WCE 2027</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css?v=2">
+  <link rel="stylesheet" href="/static/styles.css?v=5">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
@@ -39,7 +39,7 @@
           <p class="eyebrow" data-i18n="heroEyebrow">DATATÓN INTERNACIONAL · WCE 2027</p>
           <h1 data-i18n="heroTitle">¿Qué reto de epidemiología debemos resolver juntos?</h1>
           <p data-i18n="heroBody">Ayúdanos a construir una agenda internacional de epidemiología basada en las prioridades de quienes trabajan en los territorios.</p>
-          <span class="time-chip"><span aria-hidden="true">◷</span> <span data-i18n="time">4 minutos</span></span>
+          <span class="time-chip"><span aria-hidden="true">◷</span> <span data-i18n="time">6 minutos</span></span>
         </div>
       </div>
 
@@ -52,6 +52,10 @@
             <span class="privacy-icon" aria-hidden="true">◎</span>
             <div><strong data-i18n="privacyTitle">Uso responsable de datos</strong><p data-i18n="privacyBody">Tu correo funciona como identificador y solo estará disponible para el comité. El tablero muestra resultados agregados.</p></div>
           </div>
+          <div class="registration-note" role="note">
+            <span aria-hidden="true">i</span>
+            <p><strong data-i18n="registrationTitle">Nota importante</strong><span data-i18n="registrationBody">Esta encuesta recoge retos e información sobre posibles fuentes de datos. No constituye una inscripción al datatón ni al Congreso.</span></p>
+          </div>
           <div class="congress-note">
             <strong>WCE 2027</strong>
             <span data-i18n="congressDate">Medellín, Colombia · 31 ago — 3 sep</span>
@@ -60,8 +64,8 @@
 
         <section class="form-card" aria-labelledby="form-title">
           <div class="progress-head">
-            <div><p class="step-label" id="step-label">PASO 1 DE 3</p><h2 id="form-title" data-i18n="step1Title">Sobre ti y tu territorio</h2></div>
-            <span id="progress-percent">33%</span>
+            <div><p class="step-label" id="step-label">PASO 1 DE 4</p><h2 id="form-title" data-i18n="step1Title">Sobre ti y tu territorio</h2></div>
+            <span id="progress-percent">25%</span>
           </div>
           <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
 
@@ -87,9 +91,14 @@
 
             <section class="form-step" data-step="2">
               <p class="section-lead" data-i18n="step2Lead">Elige hasta tres áreas y describe el reto más urgente en tus propias palabras.</p>
+              <div class="field full">
+                <label for="thematic_axis"><span data-i18n="thematicAxis">Eje temático principal del Congreso</span><b>*</b></label>
+                <select id="thematic_axis" name="thematic_axis" required></select>
+                <small data-i18n="thematicAxisHelp">La lista de temas se organizará según el eje seleccionado.</small>
+              </div>
               <fieldset class="field full category-field">
-                <legend><span data-i18n="categories">Áreas prioritarias de epidemiología</span><b>*</b></legend>
-                <small data-i18n="categoriesHelp">Selecciona entre 1 y 3 áreas.</small>
+                <legend><span data-i18n="categories">Temas del Congreso relacionados con el reto</span><b>*</b></legend>
+                <small data-i18n="categoriesHelp">Selecciona entre 1 y 3 temas del eje elegido.</small>
                 <div id="category-grid" class="category-grid"></div>
                 <p id="category-count" class="selection-count" aria-live="polite"></p>
               </fieldset>
@@ -105,7 +114,30 @@
             </section>
 
             <section class="form-step" data-step="3">
-              <p class="section-lead" data-i18n="step3Lead">Para cerrar, cuéntanos dónde está el principal cuello de botella y cómo podríamos sumar esfuerzos.</p>
+              <p class="section-lead" data-i18n="step3Lead">Comparte lo que sabes sobre posibles datos relacionados con el reto. Puedes referenciar conjuntos de datos o publicaciones que los describan.</p>
+              <div class="field full">
+                <label for="data_availability"><span data-i18n="dataAvailability">Disponibilidad de datos</span><b>*</b></label>
+                <select id="data_availability" name="data_availability" required></select>
+                <small data-i18n="dataAvailabilityHelp">Indica la situación más cercana, incluso si todavía no conoces una fuente específica.</small>
+              </div>
+              <div class="field-grid two">
+                <div class="field"><label for="data_reference_type"><span data-i18n="referenceType">Forma de referencia</span> <em data-i18n="optional">opcional</em></label><select id="data_reference_type" name="data_reference_type"></select></div>
+                <div class="field"><label for="data_source_name"><span data-i18n="sourceName">Nombre de la fuente o publicación</span> <em data-i18n="optional">opcional</em></label><input id="data_source_name" name="data_source_name" maxlength="250" data-i18n-placeholder="sourceNamePlaceholder" placeholder="Institución, conjunto de datos o publicación"></div>
+              </div>
+              <div class="field full">
+                <label for="data_source_url"><span data-i18n="sourceUrl">Enlace a la fuente o publicación</span> <em data-i18n="optional">opcional</em></label>
+                <input id="data_source_url" name="data_source_url" type="url" maxlength="1000" inputmode="url" placeholder="https://…" data-i18n-placeholder="sourceUrlPlaceholder">
+                <small data-i18n="sourceUrlHelp">Puede ser un enlace directo, catálogo, repositorio o publicación que describa cómo acceder a los datos.</small>
+              </div>
+              <div class="field full">
+                <label for="data_source_notes"><span data-i18n="sourceNotes">Notas sobre acceso, cobertura o condiciones de uso</span> <em data-i18n="optional">opcional</em></label>
+                <textarea id="data_source_notes" name="data_source_notes" maxlength="750" rows="3" data-i18n-placeholder="sourceNotesPlaceholder" placeholder="Ej.: años disponibles, población cubierta, permiso requerido o contacto responsable…"></textarea>
+              </div>
+              <div class="community-data-note"><span aria-hidden="true">+</span><p data-i18n="communityDataNote">Si no conoces una fuente, puedes continuar. La comunidad organizadora también identificará y documentará datos asociados a los retos seleccionados.</p></div>
+            </section>
+
+            <section class="form-step" data-step="4">
+              <p class="section-lead" data-i18n="step4Lead">Para cerrar, cuéntanos dónde está el principal cuello de botella y cómo podríamos sumar esfuerzos.</p>
               <div class="field full">
                 <label for="challenge_stage"><span data-i18n="stage">¿En qué etapa está la mayor dificultad?</span><b>*</b></label>
                 <select id="challenge_stage" name="challenge_stage" required></select>
@@ -159,7 +191,7 @@
           <div class="field"><label for="admin-pin" data-i18n="pin">Clave de acceso</label><input id="admin-pin" type="password" required autocomplete="current-password" data-i18n-placeholder="pinPlaceholder" placeholder="••••••••"></div>
           <p id="login-error" class="form-alert" role="alert" hidden></p>
           <button class="button primary wide" type="submit" data-i18n="enter">Entrar al tablero</button>
-          <small class="local-hint" data-i18n="localHint">Usa la clave local configurada por el comité.</small>
+          <small class="local-hint" data-i18n="localHint">Para esta prueba local, la clave inicial está en el archivo README.</small>
         </form>
       </section>
 
@@ -169,6 +201,7 @@
           <article class="metric-card"><span data-i18n="responses">Respuestas</span><strong id="metric-total">0</strong><small data-i18n="responsesNote">aportes recibidos</small></article>
           <article class="metric-card teal"><span data-i18n="countryCoverage">Cobertura</span><strong id="metric-countries">0</strong><small data-i18n="countriesNote">países representados</small></article>
           <article class="metric-card coral"><span data-i18n="topPriority">Prioridad principal</span><strong id="metric-top">—</strong><small data-i18n="mentionsNote">por número de menciones</small></article>
+          <article class="metric-card gold"><span data-i18n="dataSources">Fuentes identificadas</span><strong id="metric-data">0</strong><small data-i18n="dataSourcesNote">retos con una fuente referenciada</small></article>
         </div>
 
         <div id="empty-dashboard" class="empty-state" hidden>
@@ -178,12 +211,30 @@
 
         <div id="charts-area">
           <div class="dashboard-grid main-grid">
-            <article class="chart-card span-2"><div class="card-head"><div><p class="kicker" data-i18n="priorityAreas">ÁREAS PRIORITARIAS</p><h2 data-i18n="whatMobilizes">¿Qué temas movilizan a la comunidad?</h2></div></div><div id="category-bars" class="bar-chart"></div></article>
+            <article class="chart-card span-2"><div class="card-head"><div><p class="kicker" data-i18n="priorityAreas">TEMAS DEL CONGRESO</p><h2 data-i18n="whatMobilizes">¿Qué temas movilizan a la comunidad?</h2></div></div><div id="category-bars" class="bar-chart"></div></article>
             <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="reach">ALCANCE</p><h2 data-i18n="workScale">Escala de trabajo</h2></div></div><div id="scope-donut" class="donut-wrap"></div></article>
           </div>
+          <article class="chart-card map-card">
+            <div class="card-head map-card-head">
+              <div><p class="kicker" data-i18n="worldReach">ALCANCE MUNDIAL</p><h2 data-i18n="worldMapTitle">Mapa de países participantes</h2><p data-i18n="worldMapLead">La intensidad del color representa el número de respuestas recibidas por país.</p></div>
+              <div class="map-legend" aria-label="Escala del mapa" data-i18n-aria="mapLegendAria">
+                <span data-i18n="mapLegendNone">Sin respuestas</span>
+                <i class="map-swatch empty"></i><i class="map-swatch low"></i><i class="map-swatch medium"></i><i class="map-swatch high"></i>
+                <span data-i18n="mapLegendMore">Más respuestas</span>
+              </div>
+            </div>
+            <div id="world-map" class="world-map" role="region" aria-label="Mapa mundial de países participantes" data-i18n-aria="worldMapAria">
+              <div class="map-loading" data-i18n="loading">Cargando…</div>
+            </div>
+            <p class="map-source"><span data-i18n="mapSource">Cartografía:</span> Natural Earth · <span data-i18n="mapSourceNote">datos de dominio público, almacenados localmente</span></p>
+          </article>
           <div class="dashboard-grid">
             <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="geography">GEOGRAFÍA</p><h2 data-i18n="participatingCountries">Países participantes</h2></div></div><div id="country-list" class="country-list"></div></article>
             <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="bottlenecks">CUELLOS DE BOTELLA</p><h2 data-i18n="whereHelp">¿Dónde se necesita más apoyo?</h2></div></div><div id="stage-bars" class="bar-chart compact"></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="congressAxes">EJES DEL CONGRESO</p><h2 data-i18n="axisDistribution">Distribución de retos por eje</h2></div></div><div id="axis-bars" class="bar-chart compact"></div></article>
+            <article class="chart-card"><div class="card-head"><div><p class="kicker" data-i18n="dataLandscape">PANORAMA DE DATOS</p><h2 data-i18n="availabilityDistribution">Disponibilidad reportada</h2></div></div><div id="availability-bars" class="bar-chart compact"></div></article>
           </div>
           <article class="chart-card topics-card"><div class="card-head"><div><p class="kicker" data-i18n="voices">VOCES DEL TERRITORIO</p><h2 data-i18n="recentChallenges">Retos priorizados recientemente</h2></div></div><div id="topics-table" class="topics-table"></div></article>
         </div>
@@ -192,6 +243,6 @@
   </main>
 
   <footer><span>WCE 2027 · XXIV World Congress of Epidemiology</span><span data-i18n="footer">Prototipo del Comité del Datatón · Medellín, Colombia</span></footer>
-  <script src="/static/app.js?v=2" defer></script>
+  <script src="/static/app.js?v=5" defer></script>
 </body>
 </html>

@@ -1,13 +1,15 @@
-# EpiLovers Datathon · WCE 2027
+# EpiLovers Datathon · WCE 2027 · Versión 2
 
 Prototipo local en Python para identificar prioridades internacionales de epidemiología. Incluye:
 
 - encuesta pública en español, inglés, portugués y francés;
 - ubicación por país, primer nivel administrativo y ciudad;
-- 14 grandes áreas de epidemiología con selección de hasta tres prioridades;
+- temas oficiales del Congreso organizados en cuatro ejes, con selección de hasta tres temas;
+- campos para documentar disponibilidad, carácter público o privado y referencias de posibles fuentes de datos;
 - almacenamiento local en SQLite;
 - prevención de respuestas duplicadas por correo;
 - tablero agregado protegido para el comité;
+- mapa mundial interactivo con intensidad según respuestas por país;
 - datos ficticios de demostración, siempre separados de las respuestas reales;
 - descarga de la base real en CSV compatible con Excel.
 
@@ -20,12 +22,15 @@ Prototipo local en Python para identificar prioridades internacionales de epidem
 
 No hay que instalar paquetes: la aplicación usa únicamente herramientas incluidas con Python.
 
+> **Nota:** la encuesta sirve para proponer retos y posibles fuentes de datos. No constituye una inscripción al datatón ni al Congreso.
+
 ## Acceso al tablero
 
 - La aplicación usa la clave privada configurada en el perfil local de Windows.
-- Si el equipo no tiene una clave configurada, la ventana negra genera y muestra una clave temporal.
-- Entra en la pestaña **Tablero** e introduce la clave local.
+- Si otro equipo no tiene una clave configurada, la ventana de inicio mostrará una clave temporal para esa sesión.
+- Entra en la pestaña **Tablero**.
 - Cuando no existan respuestas reales, usa **Ver datos demo** para recorrer el prototipo.
+- El mapa usa la misma información agregada por país del tablero; no muestra correos ni datos individuales.
 - **Descargar CSV** exporta únicamente respuestas reales e incluye el correo para uso autorizado del comité.
 
 Para definir una clave propia durante una sesión local, abre PowerShell desde esta carpeta. No escribas la clave dentro del código ni la publiques en GitHub:
@@ -43,11 +48,15 @@ Para hacer una copia de seguridad, detén la aplicación y copia `data/responses
 
 ## Campos recolectados
 
-Correo; país; primer nivel administrativo; ciudad; rol; organización opcional; alcance de trabajo; entre una y tres áreas epidemiológicas; reto prioritario; población afectada opcional; etapa del principal cuello de botella; capacidades o alianzas requeridas; idioma; fecha e identificador automático.
+Correo; país; primer nivel administrativo; ciudad; rol; organización opcional; alcance de trabajo; eje temático; entre uno y tres temas del Congreso; reto prioritario; población afectada opcional; disponibilidad de datos; tipo, nombre, enlace y notas de la posible fuente; etapa del principal cuello de botella; capacidades o alianzas requeridas; idioma; fecha e identificador automático.
 
-## Publicación posterior
+El comité puede complementar posteriormente las fuentes de datos. La encuesta no depende de que cada participante conozca una fuente al momento de responder.
 
-El código puede alojarse en GitHub, pero **GitHub Pages no ejecuta Python ni guarda bases SQLite**. Cuando el comité apruebe el prototipo, conviene conectar el repositorio a un servicio que ejecute Python y añadir almacenamiento persistente. Esa será la siguiente etapa de publicación y seguridad.
+## Publicación en Render
+
+El repositorio está preparado para ejecutarse como servicio web en Render. Para conservar las respuestas se debe usar un servicio de pago con un disco persistente montado en `/opt/render/project/src/data`. La clave del tablero nunca debe escribirse en el código: se configura como variable privada en Render.
+
+Las instrucciones completas están en [`MANUAL_DESPLIEGUE_RENDER.md`](MANUAL_DESPLIEGUE_RENDER.md).
 
 ## Revisión técnica rápida
 

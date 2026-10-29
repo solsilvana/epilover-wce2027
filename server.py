@@ -36,14 +36,38 @@ DATA_DIR = BASE_DIR / "data"
 DEFAULT_DB = DATA_DIR / "responses.db"
 MAX_BODY = 32_000
 
-CATEGORIES = {
-    "communicable", "ncd", "maternal_child", "mental_health", "injuries_violence",
-    "environment_climate", "food_nutrition", "occupational", "health_systems",
-    "social_determinants", "one_health", "emergencies", "amr", "methods_data",
+CATEGORY_GROUPS = {
+    "health_topics": {
+        "infectious_diseases", "chronic_diseases", "cancer", "nutritional_metabolic",
+        "psychiatric_mental_health", "mltc", "perinatal_maternal", "women_gender",
+        "life_course", "injury_disability_care", "violence_conflict", "lifestyle",
+        "urban_health", "climate_health", "environmental_health", "occupational_health",
+        "reemerging_diseases", "humanitarian_health", "health_migration",
+    },
+    "epidemiological_methods": {
+        "innovation_epi_methods", "innovation_stat_methods", "ai_data_science",
+        "data_driven_epidemiology", "real_world_admin_data", "causal_framework",
+        "causal_aggregate_data", "spatial_epidemiology", "realtime_epidemiology",
+        "experimental_epidemiology", "field_epidemiology", "molecular_genetic",
+        "pharmacoepidemiology", "clinical_epidemiology", "screening_vaccination",
+        "health_inequalities", "exposome",
+    },
+    "policy_action": {
+        "health_policy", "evidence_guidelines", "surveillance_systems",
+        "epidemic_control_preparedness", "epidemiology_advocacy", "promotion_prevention",
+        "ethics_epidemiology", "philosophy_epidemiology", "epistemology_science",
+        "threats_science", "implementation_science", "inequalities_determinants",
+        "social_behavioral", "global_south_epidemiology", "global_health",
+    },
+    "capacity_building": {"teaching_training", "research_communication"},
 }
+CATEGORIES = set().union(*CATEGORY_GROUPS.values())
+THEME_AXES = set(CATEGORY_GROUPS)
 ROLES = {"research", "epidemiology", "clinical", "government", "community", "student", "ngo", "other"}
 SCOPES = {"local", "subnational", "national", "regional", "global"}
 STAGES = {"define", "data", "analysis", "implementation", "evaluation", "communication"}
+DATA_AVAILABILITY = {"open_public", "public_on_request", "restricted_shareable", "private_permission", "unknown", "not_identified"}
+DATA_REFERENCE_TYPES = {"", "direct_link", "data_catalog", "publication", "repository", "contact", "other"}
 LANGUAGES = {"es", "en", "pt", "fr"}
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
@@ -77,11 +101,17 @@ def init_db(db_path: Path) -> None:
                 role TEXT NOT NULL,
                 organization TEXT NOT NULL DEFAULT '',
                 work_scope TEXT NOT NULL,
+                thematic_axis TEXT NOT NULL DEFAULT 'health_topics',
                 categories_json TEXT NOT NULL,
                 priority_topic TEXT NOT NULL,
                 affected_population TEXT NOT NULL DEFAULT '',
                 challenge_stage TEXT NOT NULL,
                 collaboration TEXT NOT NULL DEFAULT '',
+                data_availability TEXT NOT NULL DEFAULT 'not_identified',
+                data_reference_type TEXT NOT NULL DEFAULT '',
+                data_source_name TEXT NOT NULL DEFAULT '',
+                data_source_url TEXT NOT NULL DEFAULT '',
+                data_source_notes TEXT NOT NULL DEFAULT '',
                 language TEXT NOT NULL,
                 consent INTEGER NOT NULL CHECK (consent = 1)
             );
@@ -89,6 +119,18 @@ def init_db(db_path: Path) -> None:
             CREATE INDEX IF NOT EXISTS idx_responses_submitted ON responses(submitted_at);
             """
         )
+        existing_columns = {row[1] for row in db.execute("PRAGMA table_info(responses)")}
+        migrations = {
+            "thematic_axis": "TEXT NOT NULL DEFAULT 'health_topics'",
+            "data_availability": "TEXT NOT NULL DEFAULT 'not_identified'",
+            "data_reference_type": "TEXT NOT NULL DEFAULT ''",
+            "data_source_name": "TEXT NOT NULL DEFAULT ''",
+            "data_source_url": "TEXT NOT NULL DEFAULT ''",
+            "data_source_notes": "TEXT NOT NULL DEFAULT ''",
+        }
+        for column, definition in migrations.items():
+            if column not in existing_columns:
+                db.execute(f"ALTER TABLE responses ADD COLUMN {column} {definition}")
         db.commit()
 
 
@@ -114,12 +156,21 @@ def validate_response(payload: dict[str, Any]) -> dict[str, Any]:
     categories = list(dict.fromkeys(str(item) for item in categories))
     if any(item not in CATEGORIES for item in categories):
         raise ValueError("invalid_categories")
+    thematic_axis = clean_text(payload.get("thematic_axis"), 40, True)
+    if thematic_axis not in THEME_AXES or any(item not in CATEGORY_GROUPS[thematic_axis] for item in categories):
+        raise ValueError("invalid_thematic_axis")
     role = clean_text(payload.get("role"), 40, True)
     scope = clean_text(payload.get("work_scope"), 40, True)
     stage = clean_text(payload.get("challenge_stage"), 40, True)
     language = clean_text(payload.get("language"), 2, True)
-    if role not in ROLES or scope not in SCOPES or stage not in STAGES or language not in LANGUAGES:
+    data_availability = clean_text(payload.get("data_availability"), 40, True)
+    data_reference_type = clean_text(payload.get("data_reference_type"), 40)
+    if (role not in ROLES or scope not in SCOPES or stage not in STAGES or language not in LANGUAGES
+            or data_availability not in DATA_AVAILABILITY or data_reference_type not in DATA_REFERENCE_TYPES):
         raise ValueError("invalid_choice")
+    data_source_url = clean_text(payload.get("data_source_url"), 1000)
+    if data_source_url and not re.fullmatch(r"https?://[^\s]+", data_source_url, re.IGNORECASE):
+        raise ValueError("invalid_url")
     if payload.get("consent") is not True:
         raise ValueError("consent_required")
     return {
@@ -131,11 +182,17 @@ def validate_response(payload: dict[str, Any]) -> dict[str, Any]:
         "role": role,
         "organization": clean_text(payload.get("organization"), 150),
         "work_scope": scope,
+        "thematic_axis": thematic_axis,
         "categories_json": json.dumps(categories, ensure_ascii=False),
         "priority_topic": clean_text(payload.get("priority_topic"), 500, True),
         "affected_population": clean_text(payload.get("affected_population"), 250),
         "challenge_stage": stage,
         "collaboration": clean_text(payload.get("collaboration"), 500),
+        "data_availability": data_availability,
+        "data_reference_type": data_reference_type,
+        "data_source_name": clean_text(payload.get("data_source_name"), 250),
+        "data_source_url": data_source_url,
+        "data_source_notes": clean_text(payload.get("data_source_notes"), 750),
         "language": language,
         "consent": 1,
     }
@@ -166,10 +223,15 @@ def load_real_rows(db_path: Path) -> list[dict[str, Any]]:
 
 def demo_rows() -> list[dict[str, Any]]:
     countries = ["CO", "BR", "MX", "CA", "FR", "ZA", "KE", "IN", "PT", "CL", "GB", "AU"]
-    categories = [
-        ["communicable", "amr"], ["ncd", "food_nutrition"], ["environment_climate", "one_health"],
-        ["mental_health", "social_determinants"], ["maternal_child", "health_systems"],
-        ["methods_data", "emergencies"], ["occupational"], ["injuries_violence"],
+    demo_themes = [
+        ("health_topics", ["infectious_diseases", "reemerging_diseases"]),
+        ("health_topics", ["chronic_diseases", "nutritional_metabolic"]),
+        ("epidemiological_methods", ["realtime_epidemiology", "spatial_epidemiology"]),
+        ("health_topics", ["psychiatric_mental_health", "violence_conflict"]),
+        ("policy_action", ["surveillance_systems", "inequalities_determinants"]),
+        ("epidemiological_methods", ["ai_data_science", "data_driven_epidemiology"]),
+        ("health_topics", ["occupational_health", "climate_health"]),
+        ("capacity_building", ["research_communication", "teaching_training"]),
     ]
     topics = [
         "Early warning for dengue and climate-sensitive outbreaks",
@@ -192,11 +254,17 @@ def demo_rows() -> list[dict[str, Any]]:
             "role": list(ROLES)[index % len(ROLES)],
             "organization": "Demo organization",
             "work_scope": list(SCOPES)[index % len(SCOPES)],
-            "categories": categories[index % len(categories)],
+            "thematic_axis": demo_themes[index % len(demo_themes)][0],
+            "categories": demo_themes[index % len(demo_themes)][1],
             "priority_topic": topics[index % len(topics)],
             "affected_population": "Priority populations",
             "challenge_stage": list(STAGES)[index % len(STAGES)],
             "collaboration": "Open to cross-country collaboration",
+            "data_availability": list(DATA_AVAILABILITY)[index % len(DATA_AVAILABILITY)],
+            "data_reference_type": "publication" if index % 3 == 0 else "direct_link",
+            "data_source_name": "Illustrative epidemiology dataset",
+            "data_source_url": "https://example.org/dataset" if index % 4 else "",
+            "data_source_notes": "Demo reference only",
             "language": list(LANGUAGES)[index % len(LANGUAGES)],
         })
     return rows
@@ -211,6 +279,9 @@ def aggregate(rows: list[dict[str, Any]], demo: bool) -> dict[str, Any]:
     scope_counts = Counter(row["work_scope"] for row in rows)
     stage_counts = Counter(row["challenge_stage"] for row in rows)
     language_counts = Counter(row["language"] for row in rows)
+    axis_counts = Counter(row.get("thematic_axis", "health_topics") for row in rows)
+    availability_counts = Counter(row.get("data_availability", "not_identified") for row in rows)
+    data_identified = sum(1 for row in rows if row.get("data_source_url") or row.get("data_source_name"))
     recent = [
         {
             "id": row["respondent_id"], "date": row["submitted_at"][:10], "country": row["country"],
@@ -223,6 +294,9 @@ def aggregate(rows: list[dict[str, Any]], demo: bool) -> dict[str, Any]:
         "total": len(rows),
         "countries": len(country_counts),
         "top_category": category_counts.most_common(1)[0][0] if category_counts else None,
+        "data_identified": data_identified,
+        "thematic_axes": dict(axis_counts.most_common()),
+        "data_availability": dict(availability_counts.most_common()),
         "categories": dict(category_counts.most_common()),
         "country_counts": dict(country_counts.most_common()),
         "roles": dict(role_counts.most_common()),
@@ -237,8 +311,9 @@ def csv_bytes(rows: list[dict[str, Any]]) -> bytes:
     output = io.StringIO(newline="")
     fields = [
         "respondent_id", "submitted_at", "email", "country", "admin1", "city", "role",
-        "organization", "work_scope", "categories", "priority_topic", "affected_population",
-        "challenge_stage", "collaboration", "language",
+        "organization", "work_scope", "thematic_axis", "categories", "priority_topic", "affected_population",
+        "challenge_stage", "collaboration", "data_availability", "data_reference_type",
+        "data_source_name", "data_source_url", "data_source_notes", "language",
     ]
     writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
     writer.writeheader()
@@ -250,7 +325,7 @@ def csv_bytes(rows: list[dict[str, Any]]) -> bytes:
 
 
 class AppHandler(BaseHTTPRequestHandler):
-    server_version = "EpiLover/1.0"
+    server_version = "EpiLover/2.0"
 
     @property
     def app(self) -> "AppServer":
@@ -319,7 +394,7 @@ class AppHandler(BaseHTTPRequestHandler):
             return self.serve_file(STATIC_DIR / "index.html", "text/html; charset=utf-8")
         if path.startswith("/static/"):
             relative = Path(path.removeprefix("/static/"))
-            suffixes = {".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".png": "image/png", ".svg": "image/svg+xml"}
+            suffixes = {".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".png": "image/png", ".svg": "image/svg+xml", ".geojson": "application/geo+json; charset=utf-8"}
             return self.serve_file(STATIC_DIR / relative, suffixes.get(relative.suffix.lower(), "application/octet-stream"))
         if path == "/api/health":
             return self.send_json({"ok": True, "time": utc_now()})
@@ -401,23 +476,27 @@ class AppServer(ThreadingHTTPServer):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the EpiLover survey locally")
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8000)
-    parser.add_argument("--db", type=Path, default=DEFAULT_DB)
+    parser.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"))
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
+    parser.add_argument(
+        "--db",
+        type=Path,
+        default=Path(os.environ.get("EPILOVER_DB_PATH", str(DEFAULT_DB))),
+    )
     parser.add_argument("--no-browser", action="store_true")
     args = parser.parse_args()
     init_db(args.db)
     admin_pin = os.environ.get("EPILOVER_ADMIN_PIN")
-    generated_pin = False
+    temporary_pin = False
     if not admin_pin:
         if args.host not in {"127.0.0.1", "localhost", "::1"}:
             parser.error("EPILOVER_ADMIN_PIN is required when the server is not local")
         admin_pin = secrets.token_urlsafe(9)
-        generated_pin = True
+        temporary_pin = True
     server = AppServer((args.host, args.port), args.db, admin_pin)
     url = f"http://{args.host}:{args.port}"
     print(f"\nEpiLover is ready at {url}")
-    if generated_pin:
+    if temporary_pin:
         print(f"Temporary dashboard key: {admin_pin}")
     print("Press Ctrl+C to stop it.\n")
     if not args.no_browser:
